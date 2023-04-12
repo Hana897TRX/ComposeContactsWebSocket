@@ -58,6 +58,12 @@ fun ConnectionUI() {
             fontWeight = FontWeight.Bold,
             fontSize = 18.sp,
         )
+        TextField(
+            modifier = Modifier.padding(top = 16.dp),
+            value = textState,
+            onValueChange = setTextState, placeholder = {
+            Text(text = "Send to websocket")
+        })
         Button(
             modifier = Modifier.padding(top = 16.dp),
             onClick = {
@@ -69,9 +75,6 @@ fun ConnectionUI() {
                 text = "Send message",
             )
         }
-        TextField(value = textState, onValueChange = setTextState, placeholder = {
-            Text(text = "Send to websocket")
-        })
     }
 }
 

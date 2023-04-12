@@ -1,7 +1,7 @@
 package com.hana897trx.contactsregister.data
 
 import com.google.gson.Gson
-import com.hana897trx.contactsregister.data.listener.WebSocketListener
+import com.hana897trx.contactsregister.data.listener.WebSocketHana
 import com.hana897trx.contactsregister.data.model.SocketResponse
 import com.hana897trx.contactsregister.utils.ResourceState
 import kotlinx.coroutines.Dispatchers.IO
@@ -13,7 +13,7 @@ import okhttp3.WebSocket
 import javax.inject.Inject
 
 class SocketRDSI @Inject constructor(
-    private val webSocketListener: WebSocketListener,
+    private val webSocketListener: WebSocketHana,
     private val webSocket: WebSocket,
 ): SocketRDS {
 

@@ -1,8 +1,7 @@
 package com.hana897trx.contactsregister.di
 
 import android.content.Context
-import com.hana897trx.contactsregister.data.listener.WebSocketListener
-import com.hana897trx.contactsregister.utils.Constants.WEB_SOCKET_URL
+import com.hana897trx.contactsregister.data.listener.WebSocketHana
 import com.hana897trx.contactsregister.utils.NetworkConnection
 import dagger.Module
 import dagger.Provides
@@ -33,11 +32,11 @@ object CoreDI {
 
     @Provides
     @Singleton
-    fun provideWebSocketListener() : WebSocketListener = WebSocketListener()
+    fun provideWebSocketListener() : WebSocketHana = WebSocketHana()
 
     @Provides
     @Singleton
-    fun provideWebSocket(client: OkHttpClient, request: Request, socketRDSI: WebSocketListener) : WebSocket =
+    fun provideWebSocket(client: OkHttpClient, request: Request, socketRDSI: WebSocketHana) : WebSocket =
        client.newWebSocket(request, socketRDSI)
 
     @Provides

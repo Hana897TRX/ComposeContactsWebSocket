@@ -3,9 +3,10 @@ package com.hana897trx.contactsregister.data.listener
 import android.util.Log
 import okhttp3.Response
 import okhttp3.WebSocket
+import okhttp3.WebSocketListener
 import okio.ByteString
 
-class WebSocketListener : okhttp3.WebSocketListener() {
+class WebSocketHana : WebSocketListener() {
     override fun onOpen(webSocket: WebSocket, response: Response) {
         super.onOpen(webSocket, response)
         webSocket.send("CONNECTED")
