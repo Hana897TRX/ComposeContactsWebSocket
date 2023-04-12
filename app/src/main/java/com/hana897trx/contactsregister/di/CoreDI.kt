@@ -29,7 +29,6 @@ object CoreDI {
     fun provideClient() : OkHttpClient =
         OkHttpClient()
 
-
     @Provides
     @Singleton
     fun provideWebSocketListener() : WebSocketHana = WebSocketHana()

@@ -1,4 +1,4 @@
-package com.hana897trx.contactsregister
+package com.hana897trx.contactsregister.ui.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
