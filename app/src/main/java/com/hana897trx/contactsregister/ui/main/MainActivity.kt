@@ -3,8 +3,11 @@ package com.hana897trx.contactsregister.ui.main
 import android.Manifest
 import android.content.ContentProviderOperation
 import android.content.Context
+import android.content.OperationApplicationException
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.RemoteException
+import android.provider.ContactsContract
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -26,15 +29,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.hana897trx.contactsregister.ui.theme.ContactsRegisterTheme
 import com.hana897trx.contactsregister.utils.TAGS.PERMISSION_TAG
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -47,7 +49,10 @@ class MainActivity : ComponentActivity() {
         Log.w(PERMISSION_TAG, launcherRequest.contract.toString())
         setContent {
             ContactsRegisterTheme {
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colors.background) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colors.background
+                ) {
                     ConnectionUI() {
                         launcherRequest.launch(Manifest.permission.WRITE_CONTACTS)
                     }
@@ -71,11 +76,6 @@ fun ConnectionUI(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
-        Text(
-            text = "Hoori Apps, deployed by Hana897TRX",
-            fontWeight = FontWeight.Bold,
-            fontSize = 18.sp,
-        )
         TextField(modifier = Modifier.padding(top = 16.dp),
             value = textState,
             onValueChange = setTextState,
@@ -95,7 +95,11 @@ fun ConnectionUI(
         }
         Button(
             onClick = {
-                if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                if (ContextCompat.checkSelfPermission(
+                        ctx,
+                        Manifest.permission.WRITE_CONTACTS
+                    ) == PackageManager.PERMISSION_GRANTED
+                ) {
                     Toast.makeText(ctx, "Permission already granted", Toast.LENGTH_SHORT).show()
                 } else {
                     requestContactPermission()
@@ -105,6 +109,59 @@ fun ConnectionUI(
                 text = "Request contact permission"
             )
         }
+        Button(onClick = { RegisterContact(ctx) }) {
+            Text(text = "TEST ADD CONTACT")
+        }
+    }
+}
+
+fun RegisterContact(ctx: Context) {
+    val contentProvideOperation = ArrayList<ContentProviderOperation>()
+    contentProvideOperation.add(
+        ContentProviderOperation.newInsert(
+            ContactsContract.RawContacts.CONTENT_URI
+        )
+            .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
+            .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null).build()
+    )
+    
+    contentProvideOperation.add(
+        ContentProviderOperation
+            .newInsert(ContactsContract.Data.CONTENT_URI)
+            .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+            .withValue(
+                ContactsContract.Data.MIMETYPE,
+                ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE
+            )
+            .withValue(
+                ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
+                "NAME"
+            ).build()
+    )
+    
+    contentProvideOperation.add(
+        ContentProviderOperation
+            .newInsert(ContactsContract.Data.CONTENT_URI)
+            .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
+            .withValue(
+                ContactsContract.Data.MIMETYPE,
+                ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
+            )
+            .withValue(
+                ContactsContract.CommonDataKinds.Phone.NUMBER,
+                "7771020921"
+            )
+            .withValue(
+                ContactsContract.CommonDataKinds.Phone.TYPE,
+                ContactsContract.CommonDataKinds.Phone.TYPE_WORK
+            )
+            .build())
+    try {
+        ctx.contentResolver.applyBatch(ContactsContract.AUTHORITY, contentProvideOperation)
+    } catch (e: OperationApplicationException) {
+        e.printStackTrace()
+    } catch (e: RemoteException) {
+        e.printStackTrace()
     }
 }
 
