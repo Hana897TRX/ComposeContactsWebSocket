@@ -1,7 +1,9 @@
 package com.hana897trx.contactsregister.di
 
-import com.hana897trx.contactsregister.data.SocketRDS
-import com.hana897trx.contactsregister.data.SocketRDSI
+import com.hana897trx.contactsregister.data.contacts.ContactsLDS
+import com.hana897trx.contactsregister.data.contacts.ContactsLDSI
+import com.hana897trx.contactsregister.data.socket.SocketRDS
+import com.hana897trx.contactsregister.data.socket.SocketRDSI
 import com.hana897trx.contactsregister.repo.SocketRepository
 import com.hana897trx.contactsregister.repo.SocketRepositoryI
 import dagger.Binds
@@ -21,4 +23,9 @@ abstract class CoreBinding {
     abstract fun bindRepositoryRDS(
         imp: SocketRepositoryI
     ) : SocketRepository
+
+    @Binds
+    abstract fun bindContactsLDS(
+        imp: ContactsLDSI
+    ) : ContactsLDS
 }

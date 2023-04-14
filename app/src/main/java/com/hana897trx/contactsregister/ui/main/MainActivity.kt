@@ -116,53 +116,7 @@ fun ConnectionUI(
 }
 
 fun RegisterContact(ctx: Context) {
-    val contentProvideOperation = ArrayList<ContentProviderOperation>()
-    contentProvideOperation.add(
-        ContentProviderOperation.newInsert(
-            ContactsContract.RawContacts.CONTENT_URI
-        )
-            .withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null)
-            .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null).build()
-    )
-    
-    contentProvideOperation.add(
-        ContentProviderOperation
-            .newInsert(ContactsContract.Data.CONTENT_URI)
-            .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-            .withValue(
-                ContactsContract.Data.MIMETYPE,
-                ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE
-            )
-            .withValue(
-                ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,
-                "NAME"
-            ).build()
-    )
-    
-    contentProvideOperation.add(
-        ContentProviderOperation
-            .newInsert(ContactsContract.Data.CONTENT_URI)
-            .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0)
-            .withValue(
-                ContactsContract.Data.MIMETYPE,
-                ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE
-            )
-            .withValue(
-                ContactsContract.CommonDataKinds.Phone.NUMBER,
-                "7771020921"
-            )
-            .withValue(
-                ContactsContract.CommonDataKinds.Phone.TYPE,
-                ContactsContract.CommonDataKinds.Phone.TYPE_WORK
-            )
-            .build())
-    try {
-        ctx.contentResolver.applyBatch(ContactsContract.AUTHORITY, contentProvideOperation)
-    } catch (e: OperationApplicationException) {
-        e.printStackTrace()
-    } catch (e: RemoteException) {
-        e.printStackTrace()
-    }
+
 }
 
 @Preview(showBackground = true)

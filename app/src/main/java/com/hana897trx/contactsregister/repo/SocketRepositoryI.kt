@@ -1,7 +1,7 @@
 package com.hana897trx.contactsregister.repo
 
-import com.hana897trx.contactsregister.data.SocketRDS
-import com.hana897trx.contactsregister.data.model.SocketResponse
+import com.hana897trx.contactsregister.data.socket.SocketRDS
+import com.hana897trx.contactsregister.data.socket.model.SocketPayload
 import com.hana897trx.contactsregister.di.NetworkStatus
 import com.hana897trx.contactsregister.utils.ResourceState
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +14,7 @@ class SocketRepositoryI @Inject constructor(
     private val socketRDS: SocketRDS,
 ): SocketRepository {
 
-    override suspend fun sendData(socketPayload: SocketResponse): Flow<ResourceState<Boolean>> {
+    override suspend fun sendData(socketPayload: SocketPayload): Flow<ResourceState<Boolean>> {
         return if(isDeviceOnline) {
             socketRDS.sendData(socketPayload)
         } else {
@@ -22,7 +22,11 @@ class SocketRepositoryI @Inject constructor(
         }
     }
 
-    override suspend fun receiveData(): Flow<ResourceState<SocketResponse>> {
-        TODO("Not yet implemented")
+    override suspend fun receiveData(): Flow<ResourceState<SocketPayload>> {
+        return if(isDeviceOnline) {
+            socketRDS.receiveData()
+        } else {
+            flowOf(ResourceState.Error(errorMessage = "Device is offline"))
+        }
     }
 }

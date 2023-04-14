@@ -9,13 +9,13 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class SendSocketUC @Inject constructor(
+class ReceiveSocketUC @Inject constructor(
     private val socketRepository: SocketRepository,
-){
-    suspend operator fun invoke(socketPayload: SocketPayload) : Flow<ResourceState<Boolean>>  {
+) {
+    suspend operator fun invoke() : Flow<ResourceState<SocketPayload>> {
         return withContext(IO) {
             try {
-                socketRepository.sendData(socketPayload)
+                socketRepository.receiveData()
             } catch (e: Exception) {
                 flowOf(ResourceState.Error(errorMessage = e.message ?: "Unknown error"))
             }

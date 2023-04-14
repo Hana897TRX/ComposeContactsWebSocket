@@ -1,7 +1,7 @@
 package com.hana897trx.contactsregister.di
 
 import android.content.Context
-import com.hana897trx.contactsregister.data.listener.WebSocketHana
+import com.hana897trx.contactsregister.data.socket.listener.WebSocketHana
 import com.hana897trx.contactsregister.utils.NetworkConnection
 import dagger.Module
 import dagger.Provides
