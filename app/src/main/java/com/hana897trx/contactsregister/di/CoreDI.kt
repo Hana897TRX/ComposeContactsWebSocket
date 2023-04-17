@@ -2,6 +2,7 @@ package com.hana897trx.contactsregister.di
 
 import android.content.Context
 import com.hana897trx.contactsregister.data.socket.listener.WebSocketHana
+import com.hana897trx.contactsregister.utils.Constants.WEB_SOCKET_URL
 import com.hana897trx.contactsregister.utils.NetworkConnection
 import dagger.Module
 import dagger.Provides
@@ -22,7 +23,7 @@ object CoreDI {
     fun provideRequest() : Request =
         Request
             .Builder()
-            .url("wss://socketsbay.com/wss/v2/1/demo/")
+            .url(WEB_SOCKET_URL)
             .build()
 
     @Provides

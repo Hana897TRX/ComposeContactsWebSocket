@@ -29,8 +29,8 @@ class WebSocketHana : WebSocketListener() {
     }
 
     override fun onMessage(webSocket: WebSocket, text: String) {
-
         val socketPayload = text.toSocketResponse()
+
         if (socketPayload.device == DeviceModel.CLIENT) {
             webSocket.send("RECEIVED : $text")
         } else if (socketPayload.device == DeviceModel.SERVER) {

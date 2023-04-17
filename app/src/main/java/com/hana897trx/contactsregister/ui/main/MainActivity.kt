@@ -109,14 +109,10 @@ fun ConnectionUI(
                 text = "Request contact permission"
             )
         }
-        Button(onClick = { RegisterContact(ctx) }) {
+        Button(onClick = {  }) {
             Text(text = "TEST ADD CONTACT")
         }
     }
-}
-
-fun RegisterContact(ctx: Context) {
-
 }
 
 @Preview(showBackground = true)

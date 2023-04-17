@@ -6,6 +6,7 @@ import android.content.OperationApplicationException
 import android.os.RemoteException
 import android.provider.ContactsContract
 import com.hana897trx.contactsregister.data.contacts.model.ContactsModel
+import com.hana897trx.contactsregister.data.contacts.model.ContactsRequest
 import com.hana897trx.contactsregister.utils.ResourceState
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers.IO
@@ -17,8 +18,8 @@ import javax.inject.Inject
 class ContactsLDSI @Inject constructor(
     @ApplicationContext private val ctx: Context
 ) : ContactsLDS {
-    override suspend fun saveContacts(data: List<ContactsModel>) : ResourceState<Unit> {
-        data.map { contact ->
+    override suspend fun saveContacts(data: ContactsRequest) : ResourceState<Unit> {
+        data.contacts.map { contact ->
 
             // Prepare Operation
             val contentProvideOperation = ArrayList<ContentProviderOperation>()

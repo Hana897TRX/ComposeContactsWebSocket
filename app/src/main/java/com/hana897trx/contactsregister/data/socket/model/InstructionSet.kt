@@ -7,4 +7,5 @@ enum class InstructionSet {
     DELETE_CONTACTS,
     OK,
     NULL,
+    SUCCESS,
 }
