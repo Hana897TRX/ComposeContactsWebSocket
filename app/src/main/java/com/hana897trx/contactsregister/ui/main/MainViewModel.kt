@@ -18,6 +18,8 @@ import com.hana897trx.contactsregister.utils.ResourceState
 import com.hana897trx.contactsregister.utils.removeComas
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -30,12 +32,18 @@ class MainViewModel @Inject constructor(
     private val receiveSocketUC: ReceiveSocketUC,
     private val saveContactsUC: SaveContactsUC,
 ): ViewModel() {
+    private var _receiveState: MutableStateFlow<ResourceState<SocketPayload>> = MutableStateFlow(ResourceState.Idle)
+    val receiveState = _receiveState.asStateFlow()
+    private var _sendState: MutableStateFlow<ResourceState<SocketPayload>> = MutableStateFlow(ResourceState.Idle)
+    val sendState = _sendState.asStateFlow()
+
     init {
         receiveSocket()
     }
     fun sendMessage(text: String) {
         val payload = SocketPayload(device = DeviceModel.CLIENT, instruction = InstructionSet.OK, payload = text)
         viewModelScope.launch {
+            _sendState.emit(ResourceState.Success(payload))
             sendSocketUC(payload).onEach {
                 Log.w("MainViewModel", "Frontend Received: $it")
             }.launchIn(viewModelScope)
@@ -44,6 +52,7 @@ class MainViewModel @Inject constructor(
 
     fun sendMessage(payload: SocketPayload) {
         viewModelScope.launch {
+            _sendState.emit(ResourceState.Success(payload))
             sendSocketUC(payload).onEach {
                 Log.w("MainViewModel", "Frontend Received: $it")
             }.launchIn(viewModelScope)
@@ -109,6 +118,7 @@ class MainViewModel @Inject constructor(
                         }
                     }
                 }
+                _receiveState.emit(response)
             }
         } catch (e: Exception) {
             Log.e("MainViewModel", e.toString())
