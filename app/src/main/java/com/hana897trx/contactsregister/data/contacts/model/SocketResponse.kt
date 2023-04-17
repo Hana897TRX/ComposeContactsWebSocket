@@ -5,4 +5,5 @@ import com.hana897trx.contactsregister.data.socket.model.InstructionSet
 data class SocketResponse(
     val id: String = String(),
     val status: InstructionSet = InstructionSet.NULL,
+    val message: String = String(),
 )

@@ -86,14 +86,22 @@ class MainViewModel @Inject constructor(
 
                                 saveContactsUC(contactsRequest).onEach { localResponse ->
                                     when(localResponse) {
-                                        is ResourceState.Error -> {}
+                                        is ResourceState.Error -> {
+                                            _sendState.emit(ResourceState.Error(errorMessage = localResponse.errorMessage))
+                                            val payload = SocketPayload(
+                                                device = DeviceModel.CLIENT,
+                                                instruction = InstructionSet.REGISTER_CONTACTS,
+                                                payload = "{error: ${localResponse.errorMessage}}",
+                                            )
+                                            sendMessage(payload)
+                                        }
                                         is ResourceState.Idle -> {}
                                         is ResourceState.Loading -> {}
                                         is ResourceState.Success -> {
                                             val payload = SocketPayload(
                                                 device = DeviceModel.CLIENT,
                                                 instruction = InstructionSet.REGISTER_CONTACTS,
-                                                payload = Gson().toJson(SocketResponse(id = contactsRequest.groupId, status = InstructionSet.SUCCESS))
+                                                payload = "{id: ${contactsRequest.groupId}}",
                                             )
                                             sendMessage(payload)
                                         }
@@ -109,12 +117,7 @@ class MainViewModel @Inject constructor(
                             InstructionSet.OK -> {
 
                             }
-                            InstructionSet.NULL -> {
-
-                            }
-                            InstructionSet.SUCCESS -> {
-
-                            }
+                            else -> {}
                         }
                     }
                 }

@@ -32,15 +32,14 @@ class WebSocketHana : WebSocketListener() {
         val socketPayload = text.toSocketResponse()
 
         if (socketPayload.device == DeviceModel.CLIENT) {
-            webSocket.send("RECEIVED : $text")
+            Log.w(WSL, "RECEIVED : $text")
+            webSocket.send(text)
         } else if (socketPayload.device == DeviceModel.SERVER) {
             runBlocking(IO) {
                 _socketInfo.emit(ResourceState.Loading)
                 _socketInfo.emit(ResourceState.Success(socketPayload))
             }
         }
-
-        Log.w(WSL, "RECEIVED : $text")
     }
 
     override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {

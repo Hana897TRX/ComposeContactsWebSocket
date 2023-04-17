@@ -8,4 +8,5 @@ enum class InstructionSet {
     OK,
     NULL,
     SUCCESS,
+    ERROR,
 }
